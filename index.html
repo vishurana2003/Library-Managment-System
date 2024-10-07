@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to external CSS file -->
+</head>
+<body>
+
+    <div id="login-section" class="container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <select id="role" class="form-control">
+                <option value="admin">Admin</option>
+                <option value="user">User</option>
+            </select>
+            <input type="text" id="username" placeholder="Username" class="form-control" required>
+            <input type="password" id="password" placeholder="Password" class="form-control" required>
+            <input type="submit" value="Login" class="btn">
+        </form>
+    </div>
+
+    <div id="admin-dashboard" class="container hidden">
+        <h2>Admin Dashboard</h2>
+        <button class="btn" onclick="logout()">Logout</button>
+        <div class="dashboard">
+            <button onclick="showSection('check-availability-section')" class="btn">Check Book Availability</button>
+            <button onclick="showSection('issue-book-section')" class="btn">Issue Book</button>
+            <button onclick="showSection('return-book-section')" class="btn">Return Book</button>
+            <button onclick="showSection('fine-payment-section')" class="btn">Fine Payment</button>
+            <button onclick="showSection('add-membership-section')" class="btn">Add Membership</button>
+            <button onclick="showSection('update-membership-section')" class="btn">Update Membership</button>
+            <button onclick="showSection('add-book-section')" class="btn">Add Book</button>
+            <button onclick="showSection('update-book-section')" class="btn">Update Book</button>
+            <button onclick="showSection('user-management-section')" class="btn">User Management</button>
+            <button onclick="openReportsModal()" class="btn">Reports</button> <!-- Open Reports Modal -->
+        </div>
+    </div>
+
+    <div id="user-dashboard" class="container hidden">
+        <h2>User Dashboard</h2>
+        <button class="btn" onclick="logout()">Logout</button>
+        <div class="dashboard">
+            <button onclick="showSection('check-availability-section')" class="btn">Check Book Availability</button>
+            <button onclick="showSection('issue-book-section')" class="btn">Issue Book</button>
+            <button onclick="showSection('return-book-section')" class="btn">Return Book</button>
+            <button onclick="openReportsModal()" class="btn">Reports</button> <!-- Open Reports Modal -->
+        </div>
+    </div>
+
+    <!-- Check Book Availability Section -->
+    <div id="check-availability-section" class="container hidden">
+        <h2>Check Book Availability</h2>
+        <form id="checkAvailabilityForm">
+            <input type="text" id="searchBookName" placeholder="Enter Book Name" class="form-control" required>
+            <input type="submit" value="Check Availability" class="btn">
+        </form>
+        <div id="bookAvailabilityResult" class="hidden">
+            <p id="availabilityMessage"></p>
+            <button id="issueAvailableBookBtn" class="btn hidden">Issue this Book</button>
+        </div>
+    </div>
+
+    <!-- Issue Book Section -->
+    <div id="issue-book-section" class="container hidden">
+        <h2>Issue Book</h2>
+        <form id="issueForm">
+            <input type="text" id="bookName" placeholder="Book Name" class="form-control" required>
+            <input type="text" id="authorName" placeholder="Author Name" class="form-control" value="Author Auto Populated" readonly>
+            <label>Issue Date:</label>
+            <input type="date" id="issueDate" class="form-control" readonly>
+            <label>Return Date:</label>
+            <input type="date" id="returnDate" class="form-control" required>
+            <input type="submit" value="Issue" class="btn">
+            <button type="button" class="btn" onclick="cancelForm(this)">Cancel</button>
+        </form>
+    </div>
+
+    <div id="return-book-section" class="container hidden">
+        <h2>Return Book</h2>
+        <form id="returnForm">
+            <input type="text" id="returnBookName" placeholder="Book Name" class="form-control" required>
+            <input type="text" id="returnAuthorName" placeholder="Author Name" class="form-control" value="Author Auto Populated" readonly>
+            <input type="text" id="serialNo" placeholder="Serial Number" class="form-control" required>
+            <label>Issue Date:</label>
+            <input type="date" id="issuedDate" class="form-control" readonly>
+            <label>Return Date:</label>
+            <input type="date" id="returnBookDate" class="form-control" required>
+            <input type="submit" value="Return" class="btn">
+            <button type="button" class="btn" onclick="cancelForm(this)">Cancel</button>
+        </form>
+    </div>
+
+    <div id="fine-payment-section" class="container hidden">
+        <h2>Fine Payment</h2>
+        <form id="fineForm">
+            <input type="text" id="fineAmount" placeholder="Fine Amount" class="form-control" readonly value="0">
+            <label>Fine Paid:</label>
+            <input type="checkbox" id="finePaid" class="form-control">
+            <input type="submit" value="Confirm Payment" class="btn">
+            <button type="button" class="btn" onclick="cancelForm(this)">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Add Membership Section -->
+    <div id="add-membership-section" class="container hidden">
+        <h2>Add Membership</h2>
+        <form id="addMembershipForm">
+            <input type="text" id="membershipName" placeholder="Member Name" class="form-control" required>
+            <select id="membershipDuration" class="form-control">
+                <option value="6 months" selected>6 Months</option>
+                <option value="1 year">1 Year</option>
+                <option value="2 years">2 Years</option>
+            </select>
+            <input type="submit" value="Add Membership" class="btn">
+            <button type="button" class="btn" onclick="cancelForm(this)">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Update Membership Section -->
+    <div id="update-membership-section" class="container hidden">
+        <h2>Update Membership</h2>
+        <form id="updateMembershipForm">
+            <input type="text" id="membershipNumber" placeholder="Membership Number" class="form-control" required>
+            <input type="text" id="membershipUpdateName" placeholder="Member Name" class="form-control" readonly>
+            <select id="membershipUpdateDuration" class="form-control">
+                <option value="6 months" selected>6 Months</option>
+                <option value="1 year">1 Year</option>
+                <option value="2 years">2 Years</option>
+            </select>
+            <input type="submit" value="Update Membership" class="btn">
+            <button type="button" class="btn" onclick="cancelForm(this)">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Add Book Section -->
+    <div id="add-book-section" class="container hidden">
+        <h2>Add Book</h2>
+        <form id="addBookForm">
+            <input type="text" id="bookTitle" placeholder="Book Title" class="form-control" required>
+            <input type="text" id="bookAuthor" placeholder="Book Author" class="form-control" required>
+            <select id="bookType" class="form-control">
+                <option value="book" selected>Book</option>
+                <option value="movie">Movie</option>
+            </select>
+            <input type="submit" value="Add Book" class="btn">
+            <button type="button" class="btn" onclick="cancelForm(this)">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Update Book Section -->
+    <div id="update-book-section" class="container hidden">
+        <h2>Update Book</h2>
+        <form id="updateBookForm">
+            <input type="text" id="updateBookTitle" placeholder="Current Book Title" class="form-control" required>
+            <input type="text" id="newBookTitle" placeholder="New Book Title" class="form-control" required>
+            <input type="text" id="newBookAuthor" placeholder="New Book Author" class="form-control" required>
+            <select id="updateBookType" class="form-control">
+                <option value="book" selected>Book</option>
+                <option value="movie">Movie</option>
+            </select>
+            <input type="submit" value="Update Book" class="btn">
+            <button type="button" class="btn" onclick="cancelForm(this)">Cancel</button>
+        </form>
+    </div>
+
+    <!-- User Management Section -->
+    <div id="user-management-section" class="container hidden">
+        <h2>User Management</h2>
+        <form id="userManagementForm">
+            <input type="text" id="userUsername" placeholder="Username" class="form-control" required>
+            <input type="text" id="userRole" placeholder="Role (admin/user)" class="form-control" required>
+            <input type="submit" value="Add User" class="btn">
+            <button type="button" class="btn" onclick="cancelForm(this)">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Reports Modal -->
+    <div id="reports-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close" onclick="closeReportsModal()">&times;</span>
+            <h2>Reports</h2>
+            <ul>
+                <li><button onclick="generateReport('active-issues')" class="btn">Active Issues</button></li>
+                <li><button onclick="generateReport('membership-master-list')" class="btn">Master List of Membership</button></li>
+                <li><button onclick="generateReport('movies-master-list')" class="btn">Master List of Movies</button></li>
+                <li><button onclick="generateReport('books-master-list')" class="btn">Master List of Books</button></li>
+                <li><button onclick="generateReport('overdue-returns')" class="btn">Overdue Returns</button></li>
+                <li><button onclick="generateReport('pending-issue-requests')" class="btn">Pending Issue Requests</button></li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script> <!-- Link to external JS file -->
+</body>
+</html>
